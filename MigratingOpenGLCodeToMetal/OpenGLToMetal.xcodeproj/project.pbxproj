@@ -13,7 +13,6 @@
 		3A40C5C72277F0F500DBB29F /* AAPLMathUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A40C5AE2277F0F500DBB29F /* AAPLMathUtilities.m */; };
 		3A40C5C82277F0F500DBB29F /* Meshes in Resources */ = {isa = PBXBuildFile; fileRef = 3A40C5AF2277F0F500DBB29F /* Meshes */; };
 		3A4DDD502283D8C20095BC87 /* AAPLMeshData.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3A03BF7E227CE09A002DD1CD /* AAPLMeshData.mm */; };
-		3A4DDD522283D8C20095BC87 /* AAPLOpenGLRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A4DDD462283CE4D0095BC87 /* AAPLOpenGLRenderer.m */; settings = {COMPILER_FLAGS = "-Wno-deprecated-declarations"; }; };
 		3A4DDD552283D8C20095BC87 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ABD52E92283BB9B0050D28E /* main.m */; };
 		3A4DDD562283D8C20095BC87 /* AAPLMathUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A40C5AE2277F0F500DBB29F /* AAPLMathUtilities.m */; };
 		3A4DDD5A2283D8C20095BC87 /* Meshes in Resources */ = {isa = PBXBuildFile; fileRef = 3A40C5AF2277F0F500DBB29F /* Meshes */; };
@@ -23,9 +22,6 @@
 		3A4DDD6A2283D9150095BC87 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ABD52E92283BB9B0050D28E /* main.m */; };
 		3A4DDD6D2283D9150095BC87 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3ABD52DA2283BAFE0050D28E /* LaunchScreen.storyboard */; };
 		3A4DDD6F2283D9150095BC87 /* Meshes in Resources */ = {isa = PBXBuildFile; fileRef = 3A40C5AF2277F0F500DBB29F /* Meshes */; };
-		3A54891122A8329700D4B25A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3A54890C22A8329700D4B25A /* Main.storyboard */; };
-		3A54891422A8329700D4B25A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3A54890F22A8329700D4B25A /* Main.storyboard */; };
-		3A8BF91B22BC13DF0037A7F0 /* AAPLOpenGLRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A4DDD462283CE4D0095BC87 /* AAPLOpenGLRenderer.m */; settings = {COMPILER_FLAGS = "-Wno-deprecated-declarations"; }; };
 		3ABD52D72283BAFB0050D28E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3ABD52D52283BAFB0050D28E /* Main.storyboard */; };
 		3ABD52DC2283BAFE0050D28E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3ABD52DA2283BAFE0050D28E /* LaunchScreen.storyboard */; };
 		3ABD52EA2283BB9B0050D28E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3ABD52E42283BB9B0050D28E /* Main.storyboard */; };
@@ -39,16 +35,6 @@
 		3ABD52FB2283BE4B0050D28E /* AAPLMetalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ABD52E82283BB9B0050D28E /* AAPLMetalViewController.m */; };
 		3ABD52FE2283BF020050D28E /* Meshes in Resources */ = {isa = PBXBuildFile; fileRef = 3A40C5AF2277F0F500DBB29F /* Meshes */; };
 		3ABD53092283C4FE0050D28E /* AAPLAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ABD52F22283BC300050D28E /* AAPLAppDelegate.m */; };
-		3AFFA00F22A1F0C900D8184A /* temple.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 3AFFA00A22A1F0C900D8184A /* temple.vsh */; };
-		3AFFA01022A1F0C900D8184A /* temple.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 3AFFA00A22A1F0C900D8184A /* temple.vsh */; };
-		3AFFA01122A1F0C900D8184A /* AAPLOpenGLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AFFA00B22A1F0C900D8184A /* AAPLOpenGLViewController.m */; settings = {COMPILER_FLAGS = "-Wno-deprecated-declarations"; }; };
-		3AFFA01222A1F0C900D8184A /* AAPLOpenGLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AFFA00B22A1F0C900D8184A /* AAPLOpenGLViewController.m */; settings = {COMPILER_FLAGS = "-Wno-deprecated-declarations"; }; };
-		3AFFA01322A1F0C900D8184A /* temple.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 3AFFA00C22A1F0C900D8184A /* temple.fsh */; };
-		3AFFA01422A1F0C900D8184A /* temple.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 3AFFA00C22A1F0C900D8184A /* temple.fsh */; };
-		3AFFA01522A1F0C900D8184A /* reflect.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 3AFFA00D22A1F0C900D8184A /* reflect.vsh */; };
-		3AFFA01622A1F0C900D8184A /* reflect.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 3AFFA00D22A1F0C900D8184A /* reflect.vsh */; };
-		3AFFA01722A1F0C900D8184A /* reflect.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 3AFFA00E22A1F0C900D8184A /* reflect.fsh */; };
-		3AFFA01822A1F0C900D8184A /* reflect.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 3AFFA00E22A1F0C900D8184A /* reflect.fsh */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,13 +49,8 @@
 		3A40C5AE2277F0F500DBB29F /* AAPLMathUtilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AAPLMathUtilities.m; sourceTree = "<group>"; };
 		3A40C5AF2277F0F500DBB29F /* Meshes */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Meshes; sourceTree = "<group>"; };
 		3A40C5B52277F0F500DBB29F /* MetalRenderer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MetalRenderer.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		3A4DDD462283CE4D0095BC87 /* AAPLOpenGLRenderer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AAPLOpenGLRenderer.m; sourceTree = "<group>"; };
-		3A4DDD472283CE4D0095BC87 /* AAPLOpenGLRenderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AAPLOpenGLRenderer.h; sourceTree = "<group>"; };
-		3A4DDD4A2283CE4D0095BC87 /* AAPLGLHeaders.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AAPLGLHeaders.h; sourceTree = "<group>"; };
 		3A4DDD5F2283D8C20095BC87 /* OpenGLRenderer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenGLRenderer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A4DDD732283D9150095BC87 /* OpenGLRenderer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenGLRenderer.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		3A54890D22A8329700D4B25A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		3A54891022A8329700D4B25A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3A7ADB922298778100E45296 /* AAPLCommonDefinitions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AAPLCommonDefinitions.h; sourceTree = "<group>"; };
 		3ABD52CD2283BAFB0050D28E /* MetalRenderer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MetalRenderer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3ABD52D62283BAFB0050D28E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -82,12 +63,6 @@
 		3ABD52E92283BB9B0050D28E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		3ABD52F12283BC300050D28E /* AAPLAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AAPLAppDelegate.h; sourceTree = "<group>"; };
 		3ABD52F22283BC300050D28E /* AAPLAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AAPLAppDelegate.m; sourceTree = "<group>"; };
-		3ABD530B2283CAB50050D28E /* AAPLOpenGLViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AAPLOpenGLViewController.h; sourceTree = "<group>"; };
-		3AFFA00A22A1F0C900D8184A /* temple.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = temple.vsh; sourceTree = "<group>"; };
-		3AFFA00B22A1F0C900D8184A /* AAPLOpenGLViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AAPLOpenGLViewController.m; sourceTree = "<group>"; };
-		3AFFA00C22A1F0C900D8184A /* temple.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = temple.fsh; sourceTree = "<group>"; };
-		3AFFA00D22A1F0C900D8184A /* reflect.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = reflect.vsh; sourceTree = "<group>"; };
-		3AFFA00E22A1F0C900D8184A /* reflect.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = reflect.fsh; sourceTree = "<group>"; };
 		78D5197078D7690000000001 /* SampleCode.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = SampleCode.xcconfig; path = Configuration/SampleCode.xcconfig; sourceTree = "<group>"; };
 		78FA0B4078F9C9B000000001 /* LICENSE.txt */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -129,7 +104,6 @@
 			children = (
 				22932430229181E000000001 /* README.md */,
 				3ABD52FD2283BE710050D28E /* Metal */,
-				3ABD53072283C4110050D28E /* OpenGL */,
 				3ABD53012283C3710050D28E /* Common */,
 				3A40C5B62277F0F500DBB29F /* Products */,
 				78D5149078D515B000000001 /* Configuration */,
@@ -146,31 +120,6 @@
 				3A4DDD732283D9150095BC87 /* OpenGLRenderer.app */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		3A54890A22A8329700D4B25A /* Application */ = {
-			isa = PBXGroup;
-			children = (
-				3A54890B22A8329700D4B25A /* macOS */,
-				3A54890E22A8329700D4B25A /* iOS */,
-			);
-			path = Application;
-			sourceTree = "<group>";
-		};
-		3A54890B22A8329700D4B25A /* macOS */ = {
-			isa = PBXGroup;
-			children = (
-				3A54890C22A8329700D4B25A /* Main.storyboard */,
-			);
-			path = macOS;
-			sourceTree = "<group>";
-		};
-		3A54890E22A8329700D4B25A /* iOS */ = {
-			isa = PBXGroup;
-			children = (
-				3A54890F22A8329700D4B25A /* Main.storyboard */,
-			);
-			path = iOS;
 			sourceTree = "<group>";
 		};
 		3ABD52C72283B7830050D28E /* Application */ = {
@@ -253,23 +202,6 @@
 				3ABD52E42283BB9B0050D28E /* Main.storyboard */,
 			);
 			path = macOS;
-			sourceTree = "<group>";
-		};
-		3ABD53072283C4110050D28E /* OpenGL */ = {
-			isa = PBXGroup;
-			children = (
-				3ABD530B2283CAB50050D28E /* AAPLOpenGLViewController.h */,
-				3AFFA00B22A1F0C900D8184A /* AAPLOpenGLViewController.m */,
-				3A4DDD4A2283CE4D0095BC87 /* AAPLGLHeaders.h */,
-				3A4DDD472283CE4D0095BC87 /* AAPLOpenGLRenderer.h */,
-				3A4DDD462283CE4D0095BC87 /* AAPLOpenGLRenderer.m */,
-				3AFFA00A22A1F0C900D8184A /* temple.vsh */,
-				3AFFA00C22A1F0C900D8184A /* temple.fsh */,
-				3AFFA00D22A1F0C900D8184A /* reflect.vsh */,
-				3AFFA00E22A1F0C900D8184A /* reflect.fsh */,
-				3A54890A22A8329700D4B25A /* Application */,
-			);
-			path = OpenGL;
 			sourceTree = "<group>";
 		};
 		78D5149078D515B000000001 /* Configuration */ = {
@@ -411,12 +343,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3A54891122A8329700D4B25A /* Main.storyboard in Resources */,
-				3AFFA01322A1F0C900D8184A /* temple.fsh in Resources */,
-				3AFFA01722A1F0C900D8184A /* reflect.fsh in Resources */,
 				3A4DDD5A2283D8C20095BC87 /* Meshes in Resources */,
-				3AFFA00F22A1F0C900D8184A /* temple.vsh in Resources */,
-				3AFFA01522A1F0C900D8184A /* reflect.vsh in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -424,13 +351,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3AFFA01022A1F0C900D8184A /* temple.vsh in Resources */,
-				3AFFA01622A1F0C900D8184A /* reflect.vsh in Resources */,
 				3A4DDD6D2283D9150095BC87 /* LaunchScreen.storyboard in Resources */,
 				3A4DDD6F2283D9150095BC87 /* Meshes in Resources */,
-				3A54891422A8329700D4B25A /* Main.storyboard in Resources */,
-				3AFFA01822A1F0C900D8184A /* reflect.fsh in Resources */,
-				3AFFA01422A1F0C900D8184A /* temple.fsh in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -464,9 +386,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3AFFA01122A1F0C900D8184A /* AAPLOpenGLViewController.m in Sources */,
 				3A4DDD502283D8C20095BC87 /* AAPLMeshData.mm in Sources */,
-				3A4DDD522283D8C20095BC87 /* AAPLOpenGLRenderer.m in Sources */,
 				3A4DDD552283D8C20095BC87 /* main.m in Sources */,
 				3A4DDD562283D8C20095BC87 /* AAPLMathUtilities.m in Sources */,
 			);
@@ -479,9 +399,7 @@
 				3A4DDD632283D9150095BC87 /* AAPLMeshData.mm in Sources */,
 				3A4DDD642283D9150095BC87 /* AAPLMathUtilities.m in Sources */,
 				3A4DDD692283D9150095BC87 /* AAPLAppDelegate.m in Sources */,
-				3A8BF91B22BC13DF0037A7F0 /* AAPLOpenGLRenderer.m in Sources */,
 				3A4DDD6A2283D9150095BC87 /* main.m in Sources */,
-				3AFFA01222A1F0C900D8184A /* AAPLOpenGLViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -502,22 +420,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		3A54890C22A8329700D4B25A /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				3A54890D22A8329700D4B25A /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		3A54890F22A8329700D4B25A /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				3A54891022A8329700D4B25A /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		3ABD52D52283BAFB0050D28E /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
