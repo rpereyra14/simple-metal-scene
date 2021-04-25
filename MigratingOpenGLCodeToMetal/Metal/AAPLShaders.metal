@@ -68,7 +68,6 @@ templeTransformAndLightingShader(Vertex in [[stage_in]],
 }
 
 fragment float4 templeSamplingFragmentShader(TempleShaderInOut in [[stage_in]],
-                                             constant AAPLFrameData & frameData [[ buffer(AAPLBufferIndexUniforms) ]],
                                              texture2d<half> baseColorMap [[ texture(AAPLTextureIndexBaseColor) ]])
 {
     constexpr sampler linearSampler (mip_filter::linear,
@@ -110,7 +109,6 @@ reflectionQuadTransformShader(const device AAPLQuadVertex * vertices [[buffer(AA
 
 fragment float4
 reflectionQuadFragmentShader(QuadShaderInOut in [[stage_in]],
-                             constant AAPLFrameData & frameData [[ buffer(AAPLBufferIndexUniforms) ]],
                              texture2d<float> reflectionMap [[ texture(AAPLTextureIndexBaseColor) ]])
 {
     constexpr sampler linearSampler (mip_filter::none,

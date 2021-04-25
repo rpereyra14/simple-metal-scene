@@ -548,10 +548,6 @@ static const NSUInteger AAPLMaxBuffersInFlight = 3;
                                 offset:0
                                atIndex:AAPLBufferIndexUniforms];
 
-        [renderEncoder setFragmentBuffer:_dynamicDataBuffers[_currentBufferIndex]
-                                  offset:0
-                                 atIndex:AAPLBufferIndexUniforms];
-
         [renderEncoder setVertexBuffer:_templeVertexPositions
                                 offset:0
                                atIndex:AAPLBufferIndexMeshPositions];
