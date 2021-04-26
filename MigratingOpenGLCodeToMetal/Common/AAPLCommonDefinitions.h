@@ -10,7 +10,7 @@ Header that contains types and enumeration constants shared between Metal shader
 #include <simd/simd.h>
 
 #define RENDER_REFLECTION 1
-#define RENDER_EARTHQUAKE 1
+#define RENDER_EARTHQUAKE 0
 
 #if RENDER_EARTHQUAKE
 // Override reflection when earthquake is enabled since it can be dizzing
