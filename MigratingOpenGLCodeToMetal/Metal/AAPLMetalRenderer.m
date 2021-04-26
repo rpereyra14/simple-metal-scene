@@ -19,7 +19,13 @@ static const MTLPixelFormat AAPLColorFormat = MTLPixelFormatBGRA8Unorm_sRGB;
 // The maximum number of command buffers in flight.
 static const NSUInteger AAPLMaxBuffersInFlight = 3;
 
+#if RENDER_REFLECTION
 static const unsigned int CountReflectiveSurfaces = 4;
+#endif
+
+// Pretend this magnitude is on the Richter Scale for fun
+static const float        EarthquakeMagnitude = 5.0f;
+static const unsigned int FramesPerPeriod     = 60;
 
 /// Main class that performs the rendering.
 @implementation AAPLMetalRenderer
@@ -468,7 +474,10 @@ static const unsigned int CountReflectiveSurfaces = 4;
     }
 #endif
 
+#if !RENDER_EARTHQUAKE
+    // Earthquake cannot really be appreciated with rotation
     _rotation += .01;
+#endif
 }
 
 /// Called whenever the view orientation, layout, or size changes.
@@ -532,6 +541,17 @@ static const unsigned int CountReflectiveSurfaces = 4;
 
         for(NSUInteger index = 0; index < _templeIndexBuffers.count; index++)
         {
+            static unsigned int time = 0;
+            EarthquakeInfo earthquakeInfo = {RENDER_EARTHQUAKE,
+                                             EarthquakeMagnitude,
+                                             FramesPerPeriod,
+                                             time};
+            time++;
+
+            [renderEncoder setVertexBytes:&earthquakeInfo
+                                   length:sizeof(earthquakeInfo)
+                                  atIndex:BufferIndexEarthquakeInfo];
+
             // Set any textures read or sampled from the render pipeline.
             [renderEncoder setFragmentTexture:_templeTextures[index]
                                       atIndex:AAPLTextureIndexBaseColor];
@@ -602,6 +622,17 @@ static const unsigned int CountReflectiveSurfaces = 4;
 
         for(NSUInteger index = 0; index < _templeIndexBuffers.count; index++)
         {
+            static unsigned int time = 0;
+            EarthquakeInfo earthquakeInfo = {RENDER_EARTHQUAKE,
+                                             EarthquakeMagnitude,
+                                             FramesPerPeriod,
+                                             time};
+            time++;
+
+            [renderEncoder setVertexBytes:&earthquakeInfo
+                                   length:sizeof(earthquakeInfo)
+                                  atIndex:BufferIndexEarthquakeInfo];
+
             // Set any textures read or sampled from the render pipeline.
             [renderEncoder setFragmentTexture:_templeTextures[index]
                                       atIndex:AAPLTextureIndexBaseColor];

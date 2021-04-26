@@ -33,14 +33,22 @@ typedef struct
 
 vertex TempleShaderInOut
 templeTransformAndLightingShader(Vertex in [[stage_in]],
-                                 constant float4x4      & mvpMatrix [[ buffer(AAPLBufferIndexMVPMatrix) ]],
-                                 constant AAPLFrameData & frameData  [[ buffer(AAPLBufferIndexUniforms) ]])
+                                 constant float4x4       & mvpMatrix       [[ buffer(AAPLBufferIndexMVPMatrix) ]],
+                                 constant AAPLFrameData  & frameData        [[ buffer(AAPLBufferIndexUniforms) ]],
+                                 constant EarthquakeInfo & earthquakeInfo [[ buffer(BufferIndexEarthquakeInfo) ]])
 {
     TempleShaderInOut out;
 
     // Make `in.position` a `float4` to perform 4x4 matrix math on it. Then calculate the position of
     // the vertex in clip space and output the value for clipping and rasterization.
     out.position = mvpMatrix * float4(in.position, 1.0);
+
+    if (earthquakeInfo.apply) {
+        // Pretend that fault line runs along (float4){1, 0, 0, 1}
+        const float pi = 3.14159;
+        float motion = cos(float(earthquakeInfo.time * 2 * pi) / earthquakeInfo.framesPerPeriod);
+        out.position += float4(earthquakeInfo.magnitude * motion, 0.0, 0.0, 1.0);
+    }
 
     // Pass along the texture coordinate of the vertex for the fragment shader to use to sample from
     // the texture.

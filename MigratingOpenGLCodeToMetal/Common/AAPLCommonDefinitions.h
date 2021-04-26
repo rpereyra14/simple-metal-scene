@@ -10,6 +10,13 @@ Header that contains types and enumeration constants shared between Metal shader
 #include <simd/simd.h>
 
 #define RENDER_REFLECTION 1
+#define RENDER_EARTHQUAKE 1
+
+#if RENDER_EARTHQUAKE
+// Override reflection when earthquake is enabled since it can be dizzing
+#undef RENDER_REFLECTION
+#define RENDER_REFLECTION 0
+#endif
 
 #define AAPLReflectionSize ((vector_uint2){512, 512})
 
@@ -20,7 +27,8 @@ typedef enum AAPLBufferIndex
     AAPLBufferIndexMeshPositions = 0,
     AAPLBufferIndexMeshGenerics  = 1,
     AAPLBufferIndexMVPMatrix     = 2,
-    AAPLBufferIndexUniforms      = 3
+    AAPLBufferIndexUniforms      = 3,
+    BufferIndexEarthquakeInfo         = 4
 } AAPLBufferIndex;
 
 // Attribute index values shared between shader and C code to ensure Metal shader vertex
@@ -74,6 +82,12 @@ typedef struct __attribute__ ((__packed__)) AAPLQuadVertex
     packed_float2 texcoord;
 } AAPLQuadVertex;
 
-
+typedef struct __attribute__ ((__packed__)) EarthquakeInfo
+{
+    bool         apply;
+    float        magnitude;
+    unsigned int framesPerPeriod;
+    unsigned int time;
+} EarthquakeInfo;
 
 #endif
