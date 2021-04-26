@@ -20,7 +20,6 @@ static const MTLPixelFormat AAPLColorFormat = MTLPixelFormatBGRA8Unorm_sRGB;
 static const NSUInteger AAPLMaxBuffersInFlight = 3;
 
 static const unsigned int CountReflectiveSurfaces = 4;
-//static const unsigned int testing_idx = 3;
 
 /// Main class that performs the rendering.
 @implementation AAPLMetalRenderer
