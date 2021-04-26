@@ -19,6 +19,9 @@ static const MTLPixelFormat AAPLColorFormat = MTLPixelFormatBGRA8Unorm_sRGB;
 // The maximum number of command buffers in flight.
 static const NSUInteger AAPLMaxBuffersInFlight = 3;
 
+static const unsigned int CountReflectiveSurfaces = 4;
+//static const unsigned int testing_idx = 3;
+
 /// Main class that performs the rendering.
 @implementation AAPLMetalRenderer
 {
@@ -39,12 +42,13 @@ static const NSUInteger AAPLMaxBuffersInFlight = 3;
 
 #if RENDER_REFLECTION
     // Metal objects used to render the reflective quad.
-    MTLRenderPassDescriptor   *_reflectionRenderPassDescriptor;
+    MTLRenderPassDescriptor   *_reflectionRenderPassDescriptor[CountReflectiveSurfaces];
     id<MTLRenderPipelineState> _quadRenderPipeline;
-    id<MTLTexture>             _reflectionColorTexture;
-    id<MTLTexture>             _reflectionDepthTexture;
+    id<MTLTexture>             _reflectionColorTexture[CountReflectiveSurfaces];
+    id<MTLTexture>             _reflectionDepthTexture[CountReflectiveSurfaces];
     id<MTLBuffer>              _reflectionQuadBuffer;
-    matrix_float4x4            _reflectionQuadMVPMatrix;
+    matrix_float4x4            _reflectionQuadMVPMatrix[CountReflectiveSurfaces];
+    matrix_float4x4            _templeReflectionMVPMatrix[CountReflectiveSurfaces];
 #endif
 
     // Collection of Metal buffers you use to set the shader data that changes each frame.
@@ -55,7 +59,6 @@ static const NSUInteger AAPLMaxBuffersInFlight = 3;
 
     matrix_float4x4 _projectionMatrix;
     matrix_float4x4 _templeCameraMVPMatrix;
-    matrix_float4x4 _templeReflectionMVPMatrix;
 
     // Current rotation value of the temple, in radians.
     float _rotation;
@@ -294,13 +297,13 @@ static const NSUInteger AAPLMaxBuffersInFlight = 3;
             // whereas Metal defines a top-left texture origin.
             // For reflections of more complex models, you could instead invert the y texture coordinate within
             // the shader that samples from the reflection texture.
-            { { -500, -500, 0.0, 1.0}, {1.0, 1.0} },
-            { { -500,  500, 0.0, 1.0}, {1.0, 0.0} },
-            { {  500,  500, 0.0, 1.0}, {0.0, 0.0} },
+            { { -600, -600, 0.0, 1.0}, {1.0, 1.0} },
+            { { -600,  600, 0.0, 1.0}, {1.0, 0.0} },
+            { {  600,  600, 0.0, 1.0}, {0.0, 0.0} },
 
-            { { -500, -500, 0.0, 1.0}, {1.0, 1.0} },
-            { {  500,  500, 0.0, 1.0}, {0.0, 0.0} },
-            { {  500, -500, 0.0, 1.0}, {0.0, 1.0} },
+            { { -600, -600, 0.0, 1.0}, {1.0, 1.0} },
+            { {  600,  600, 0.0, 1.0}, {0.0, 0.0} },
+            { {  600, -600, 0.0, 1.0}, {0.0, 1.0} },
         };
 
         _reflectionQuadBuffer = [_device newBufferWithBytes:&AAPLQuadVertices
@@ -309,6 +312,7 @@ static const NSUInteger AAPLMaxBuffersInFlight = 3;
     }
 
     // Create texture objects and a render pass descriptor to render and display the reflection.
+    for (unsigned int i = 0; i < CountReflectiveSurfaces; i++)
     {
         MTLTextureDescriptor *textureDescriptor = [MTLTextureDescriptor new];
         textureDescriptor.width = AAPLReflectionSize.x;
@@ -318,26 +322,26 @@ static const NSUInteger AAPLMaxBuffersInFlight = 3;
         textureDescriptor.usage = MTLTextureUsageShaderRead | MTLTextureUsageRenderTarget;
         textureDescriptor.pixelFormat = AAPLColorFormat;
 
-        _reflectionColorTexture = [_device newTextureWithDescriptor:textureDescriptor];
+        _reflectionColorTexture[i] = [_device newTextureWithDescriptor:textureDescriptor];
 
         textureDescriptor.mipmapLevelCount = 1;
         textureDescriptor.pixelFormat = AAPLDepthFormat;
 
-        _reflectionDepthTexture = [_device newTextureWithDescriptor:textureDescriptor];
+        _reflectionDepthTexture[i] = [_device newTextureWithDescriptor:textureDescriptor];
 
-        _reflectionRenderPassDescriptor = [MTLRenderPassDescriptor new];
+        _reflectionRenderPassDescriptor[i] = [MTLRenderPassDescriptor new];
 
         // Configure the render pass to clear the color texture when the pass begins (`MTLLoadActionClear`)
         // and store the results of rendering to the texture when the pass ends (`MTLStoreActionStore`).
-        _reflectionRenderPassDescriptor.colorAttachments[0].texture = _reflectionColorTexture;
-        _reflectionRenderPassDescriptor.colorAttachments[0].loadAction = MTLLoadActionClear;
-        _reflectionRenderPassDescriptor.colorAttachments[0].storeAction = MTLStoreActionStore;
+        _reflectionRenderPassDescriptor[i].colorAttachments[0].texture = _reflectionColorTexture[i];
+        _reflectionRenderPassDescriptor[i].colorAttachments[0].loadAction = MTLLoadActionClear;
+        _reflectionRenderPassDescriptor[i].colorAttachments[0].storeAction = MTLStoreActionStore;
 
         // Configure the render pass to clear the depth texture when the pass begins (`MTLLoadActionClear`)
         // and discard the results of rendering to the texture when the pass ends (`MTLStoreActionDontCare`).
-        _reflectionRenderPassDescriptor.depthAttachment.loadAction = MTLLoadActionClear;
-        _reflectionRenderPassDescriptor.depthAttachment.storeAction = MTLStoreActionDontCare;
-        _reflectionRenderPassDescriptor.depthAttachment.texture = _reflectionDepthTexture;
+        _reflectionRenderPassDescriptor[i].depthAttachment.loadAction = MTLLoadActionClear;
+        _reflectionRenderPassDescriptor[i].depthAttachment.storeAction = MTLStoreActionDontCare;
+        _reflectionRenderPassDescriptor[i].depthAttachment.texture = _reflectionDepthTexture[i];
     }
 
     {
@@ -411,26 +415,58 @@ static const NSUInteger AAPLMaxBuffersInFlight = 3;
     _templeCameraMVPMatrix     = matrix_multiply(_projectionMatrix, templeModelViewMatrix);
 
 #if RENDER_REFLECTION
-    const vector_float3  quadRotationAxis  = {1, 0, 0};
-    const float          quadRotationAngle = 270 * M_PI/180;
-    const vector_float3  quadTranslation   = {0, 300, 0};
+    static const vector_float3 quadRotationAxes[CountReflectiveSurfaces] = {
+        {1, 0, 0},
+        {0, 1, 0},
+        {0, 1, 0},
+        {0, 0, 0}
+    };
 
-    const matrix_float4x4 quadRotationMatrix            = matrix4x4_rotation(quadRotationAngle, quadRotationAxis);
-    const matrix_float4x4 quadTranslationMatrtix        = matrix4x4_translation(quadTranslation);
-    const matrix_float4x4 quadModelMatrix               = matrix_multiply(quadTranslationMatrtix, quadRotationMatrix);
-    const matrix_float4x4 quadModeViewMatrix            = matrix_multiply(cameraViewMatrix, quadModelMatrix);
+    static const float quadRotationAngles[CountReflectiveSurfaces] = {
+        270 * M_PI/180,
+        270 * M_PI/180,
+        90 * M_PI/180,
+        0
+    };
 
-    const vector_float4 target = matrix_multiply(quadModelMatrix, (vector_float4){0, 0, 0, 1});
-    const vector_float4 eye    = matrix_multiply(quadModelMatrix, (vector_float4){0.0, 0.0, 250, 1});
-    const vector_float4 up     = matrix_multiply(quadModelMatrix, (vector_float4){0, 1, 0, 1});
+    static const vector_float3 quadTranslations[CountReflectiveSurfaces] = {
+        {0, 300, 0},
+        {-600, 0, 0},
+        {600, 0, 0},
+        {0, 0, 600}
+    };
 
-    const matrix_float4x4 reflectionViewMatrix       = matrix_look_at_left_hand(eye.xyz, target.xyz, up.xyz);
-    const matrix_float4x4 reflectionModelViewMatrix  = matrix_multiply(reflectionViewMatrix, templeModelMatrix);
-    const matrix_float4x4 reflectionProjectionMatrix = matrix_perspective_left_hand(M_PI/2.0, 1, 0.1, 3000.0);
+    for (unsigned int i = 0; i < CountReflectiveSurfaces; i++) {
+        const vector_float3  quadRotationAxis  = quadRotationAxes[i];
+        const float          quadRotationAngle = quadRotationAngles[i];
+        const vector_float3  quadTranslation   = quadTranslations[i];
 
-    _templeReflectionMVPMatrix = matrix_multiply(reflectionProjectionMatrix, reflectionModelViewMatrix);
+        matrix_float4x4 quadModeViewMatrix;
+        matrix_float4x4 quadModelMatrix;
 
-    _reflectionQuadMVPMatrix   = matrix_multiply(_projectionMatrix, quadModeViewMatrix);
+        if (quadRotationAngle > 0) {
+            const matrix_float4x4 quadRotationMatrix            = matrix4x4_rotation(quadRotationAngle, quadRotationAxis);
+            const matrix_float4x4 quadTranslationMatrix         = matrix4x4_translation(quadTranslation);
+            quadModelMatrix    = matrix_multiply(quadTranslationMatrix, quadRotationMatrix);
+            quadModeViewMatrix = matrix_multiply(cameraViewMatrix, quadModelMatrix);
+        } else {
+            // No rotation
+            quadModelMatrix    = matrix4x4_translation(quadTranslation);
+            quadModeViewMatrix = matrix_multiply(cameraViewMatrix, quadModelMatrix);
+        }
+
+        const vector_float4 target = matrix_multiply(quadModelMatrix, (vector_float4){0, 0, 0, 1});
+        const vector_float4 eye    = matrix_multiply(quadModelMatrix, (vector_float4){0.0, 0.0, 250, 1});
+        const vector_float4 up     = matrix_multiply(quadModelMatrix, (vector_float4){0, 1, 0, 1});
+
+        const matrix_float4x4 reflectionViewMatrix       = matrix_look_at_left_hand(eye.xyz, target.xyz, up.xyz);
+        const matrix_float4x4 reflectionModelViewMatrix  = matrix_multiply(reflectionViewMatrix, templeModelMatrix);
+        const matrix_float4x4 reflectionProjectionMatrix = matrix_perspective_left_hand(M_PI/2.0, 1, 0.1, 3000.0);
+
+        _templeReflectionMVPMatrix[i] = matrix_multiply(reflectionProjectionMatrix, reflectionModelViewMatrix);
+
+        _reflectionQuadMVPMatrix[i]   = matrix_multiply(_projectionMatrix, quadModeViewMatrix);
+    }
 #endif
 
     _rotation += .01;
@@ -465,49 +501,54 @@ static const NSUInteger AAPLMaxBuffersInFlight = 3;
     commandBuffer = [_commandQueue commandBuffer];
     commandBuffer.label = @"Reflections Command Buffer";
 
-    id<MTLRenderCommandEncoder> renderEncoder =
-        [commandBuffer renderCommandEncoderWithDescriptor:_reflectionRenderPassDescriptor];
-    renderEncoder.label = @"Reflection Render Encoder";
-
-    // Set the render pipeline state.
-    //[renderEncoder setCullMode:MTLCullModeBack];
-    [renderEncoder setRenderPipelineState:_templeRenderPipeline];
-    [renderEncoder setDepthStencilState:_depthState];
-
-    // Set any buffers fed into the render pipeline when a draw executes.
-    [renderEncoder setVertexBuffer:_dynamicDataBuffers[_currentBufferIndex]
-                            offset:0
-                           atIndex:AAPLBufferIndexUniforms];
-
-    [renderEncoder setVertexBuffer:_templeVertexPositions
-                            offset:0
-                           atIndex:AAPLBufferIndexMeshPositions];
-
-    [renderEncoder setVertexBuffer:_templeVertexGenerics
-                            offset:0
-                           atIndex:AAPLBufferIndexMeshGenerics];
-
-    [renderEncoder setVertexBytes:&_templeReflectionMVPMatrix
-                           length:sizeof(_templeReflectionMVPMatrix)
-                          atIndex:AAPLBufferIndexMVPMatrix];
-
-    for(NSUInteger index = 0; index < _templeIndexBuffers.count; index++)
+    // Render all reflective surfaces
+    // No synchronization primitives needed since these steps are data-independent
+    for (unsigned int i = 0; i < CountReflectiveSurfaces; i++)
     {
-        // Set any textures read or sampled from the render pipeline.
-        [renderEncoder setFragmentTexture:_templeTextures[index]
-                                  atIndex:AAPLTextureIndexBaseColor];
+        id<MTLRenderCommandEncoder> renderEncoder =
+            [commandBuffer renderCommandEncoderWithDescriptor:_reflectionRenderPassDescriptor[i]];
+        renderEncoder.label = [NSString stringWithFormat:@"Reflection Render Encoder %u", i];
 
-        NSUInteger indexCount = _templeIndexBuffers[index].length / sizeof(uint32_t);
+        // Set the render pipeline state.
+        //[renderEncoder setCullMode:MTLCullModeBack];
+        [renderEncoder setRenderPipelineState:_templeRenderPipeline];
+        [renderEncoder setDepthStencilState:_depthState];
 
-        // Draw the submesh.
-        [renderEncoder drawIndexedPrimitives:MTLPrimitiveTypeTriangle
-                                  indexCount:indexCount
-                                   indexType:MTLIndexTypeUInt32
-                                 indexBuffer:_templeIndexBuffers[index]
-                           indexBufferOffset:0];
+        // Set any buffers fed into the render pipeline when a draw executes.
+        [renderEncoder setVertexBuffer:_dynamicDataBuffers[_currentBufferIndex]
+                                offset:0
+                               atIndex:AAPLBufferIndexUniforms];
+
+        [renderEncoder setVertexBuffer:_templeVertexPositions
+                                offset:0
+                               atIndex:AAPLBufferIndexMeshPositions];
+
+        [renderEncoder setVertexBuffer:_templeVertexGenerics
+                                offset:0
+                               atIndex:AAPLBufferIndexMeshGenerics];
+
+        [renderEncoder setVertexBytes:&_templeReflectionMVPMatrix[i]
+                               length:sizeof(_templeReflectionMVPMatrix[i])
+                              atIndex:AAPLBufferIndexMVPMatrix];
+
+        for(NSUInteger index = 0; index < _templeIndexBuffers.count; index++)
+        {
+            // Set any textures read or sampled from the render pipeline.
+            [renderEncoder setFragmentTexture:_templeTextures[index]
+                                      atIndex:AAPLTextureIndexBaseColor];
+
+            NSUInteger indexCount = _templeIndexBuffers[index].length / sizeof(uint32_t);
+
+            // Draw the submesh.
+            [renderEncoder drawIndexedPrimitives:MTLPrimitiveTypeTriangle
+                                      indexCount:indexCount
+                                       indexType:MTLIndexTypeUInt32
+                                     indexBuffer:_templeIndexBuffers[index]
+                               indexBufferOffset:0];
+        }
+
+        [renderEncoder endEncoding];
     }
-
-    [renderEncoder endEncoding];
 
     [commandBuffer commit];
 
@@ -577,23 +618,27 @@ static const NSUInteger AAPLMaxBuffersInFlight = 3;
         }
 
 #if RENDER_REFLECTION
-        // Set the state for the reflective quad and draw it.
-        [renderEncoder setRenderPipelineState:_quadRenderPipeline];
 
-        [renderEncoder setVertexBytes:&_reflectionQuadMVPMatrix
-                               length:sizeof(_reflectionQuadMVPMatrix)
-                              atIndex:AAPLBufferIndexMVPMatrix];
+        for (unsigned int i = 0; i < CountReflectiveSurfaces; i++)
+        {
+            // Set the state for the reflective quad and draw it.
+            [renderEncoder setRenderPipelineState:_quadRenderPipeline];
 
-        [renderEncoder setVertexBuffer:_reflectionQuadBuffer
-                                offset:0
-                               atIndex:AAPLBufferIndexMeshPositions];
+            [renderEncoder setVertexBytes:&_reflectionQuadMVPMatrix[i]
+                                   length:sizeof(_reflectionQuadMVPMatrix[i])
+                                  atIndex:AAPLBufferIndexMVPMatrix];
 
-        [renderEncoder setFragmentTexture:_reflectionColorTexture
-                                  atIndex:AAPLTextureIndexBaseColor];
+            [renderEncoder setVertexBuffer:_reflectionQuadBuffer
+                                    offset:0
+                                   atIndex:AAPLBufferIndexMeshPositions];
 
-        [renderEncoder drawPrimitives:MTLPrimitiveTypeTriangle
-                          vertexStart:0
-                          vertexCount:6];
+            [renderEncoder setFragmentTexture:_reflectionColorTexture[i]
+                                      atIndex:AAPLTextureIndexBaseColor];
+
+            [renderEncoder drawPrimitives:MTLPrimitiveTypeTriangle
+                              vertexStart:0
+                              vertexCount:6];
+        }
 #endif
 
         // End encoding commands.
